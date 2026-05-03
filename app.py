@@ -387,7 +387,34 @@ def page_traitement():
                             key=f"dl_csv_{stats['name']}",
                         )
 
+# --- SECTION ÉDITION ET SAUVEGARDE ---
+st.write("### 📝 Correction manuelle des données")
+st.caption("Si le POI est vide ou incorrect, vous pouvez le modifier directement dans le tableau ci-dessous.")
 
+# On affiche le tableau éditable
+edited_df = st.data_editor(
+    processed_df,
+    column_config={
+        "POI": st.column_config.TextColumn("POI (Correction)", help="Saisissez le POI si vide"),
+        "Tipologie": st.column_config.SelectboxColumn("Tipologie", options=["STD", "NSTD"])
+    },
+    use_container_width=True,
+    hide_index=True
+)
+
+# Bouton pour générer le CSV final basé sur les modifications
+if st.button("💾 Valider les corrections et préparer le téléchargement"):
+    csv_buffer = io.StringIO()
+    # On utilise edited_df qui contient les saisies manuelles
+    edited_df.to_csv(csv_buffer, sep=';', index=False, encoding='utf-8-sig')
+    
+    st.success("Les modifications ont été prises en compte !")
+    st.download_button(
+        label="📥 Télécharger le fichier CORRIGÉ",
+        data=csv_buffer.getvalue(),
+        file_name="export_praxedo_final.csv",
+        mime="text/csv"
+    )
 # =============================================================================
 # PAGE 2 : RECHERCHE
 # =============================================================================
