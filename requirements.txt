@@ -1,0 +1,8 @@
+streamlit
+pandas
+plotly
+openpyxl
+sqlite3
+# Ajoutez ici d'autres dépendances si vous en avez dans vos modules locaux :
+# requests
+# fpdf (si utilisé pour le PDF)
